@@ -40,6 +40,23 @@ onMounted(() => {
     replaceToSpecifiedExcerpt(index);
   }
 });
+
+// Keyboard control
+document.addEventListener('keyup', (e) => {
+  switch (e.key) {
+    case 'ArrowLeft':
+      if (index.value > 0) replaceToSpecifiedExcerpt(index.value - 1);
+      break;
+    case 'ArrowRight':
+      if (index.value < excerpts.length - 1) replaceToSpecifiedExcerpt(index.value + 1);
+      break;
+    case 'r':
+      refresh();
+      break;
+    default:
+      break;
+  }
+});
 </script>
 
 <template>
