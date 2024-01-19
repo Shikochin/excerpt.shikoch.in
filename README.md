@@ -8,4 +8,4 @@ Inspired by [Dark495.me](https://dark495.me)
 - R: Random excerpt
 
 ## License
-[The Unlicense](https://choosealicense.com/licenses/unlicense/)
+The code part use [The Unlicense](https://choosealicense.com/licenses/unlicense/), excerpts are attributed to the author.
