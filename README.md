@@ -1,5 +1,6 @@
-# excerpt.shikoch.in
+# ✒️ 文摘
 Store some of my favorite words.
+
 Inspired by [Dark495.me](https://dark495.me)
 
 ## Keyboard Control

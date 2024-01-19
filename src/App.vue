@@ -61,7 +61,9 @@ document.addEventListener('keyup', (e) => {
 
 <template>
   <main>
-    <header><a id="random" title="刷新" @click="refresh">文摘 | excerpt.shikoch.in</a></header>
+    <header>
+      <a href="https://github.com/Shikochin/excerpt.shikoch.in"><i class="fa-light fa-pen-nib"></i> 文摘</a>
+    </header>
     <section id="excerpt">
       <p id="content">
         <span v-for="sentence of excerpt.content" :key="excerpt.content.indexOf(sentence)">{{ sentence }}<br /></span>
@@ -69,15 +71,15 @@ document.addEventListener('keyup', (e) => {
       <p id="author">—— {{ excerpt.author }}</p>
     </section>
     <section id="controller">
-      <a title="上一个" v-if="index != 0" @click="replaceToSpecifiedExcerpt(index - 1)">←</a>
-      <a class="disabled" title="已经到头了" v-else>←</a>
-      <a title="下一个" v-if="index != excerpts.length - 1" @click="replaceToSpecifiedExcerpt(index + 1)">→</a>
-      <a class="disabled" title="已经到头了" v-else>→</a>
+      <a title="上一个" v-if="index != 0" @click="replaceToSpecifiedExcerpt(index - 1)"><i class="fa-thin fa-arrow-left-long"></i></a>
+      <a class="disabled" title="已经到头了" v-else><i class="fa-thin fa-arrow-left-long"></i></a>
+      <a title="随机" @click="refresh"><i class="fa-thin fa-arrow-rotate-right"></i></a>
+      <a title="下一个" v-if="index != excerpts.length - 1" @click="replaceToSpecifiedExcerpt(index + 1)"><i class="fa-thin fa-arrow-right-long"></i></a>
+      <a class="disabled" title="已经到头了" v-else><i class="fa-thin fa-arrow-right-long"></i></a>
     </section>
     <footer>
-      <a href="https://github.com/Shikochin"><i class="fa-brands fa-github"></i></a>
-      <a href="https://x.com/shikoch1n"><i class="fa-brands fa-x-twitter"></i></a>
-      <a href="mailto:i@shikoch.in"><i class="fa-solid fa-envelope"></i></a>
+      Excerpts are attributed to the author<br />
+      2024-present by <a href="https://github.com/Shikochin">Shikochin</a>
     </footer>
   </main>
 </template>
@@ -133,9 +135,7 @@ a.disabled {
 }
 
 footer {
-  font-size: 40px;
-  a {
-    margin-right: 30px;
-  }
+  user-select: none;
+  font-size: 22px;
 }
 </style>
