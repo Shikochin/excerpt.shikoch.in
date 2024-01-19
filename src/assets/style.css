@@ -1,0 +1,11 @@
+body {
+  padding: 4%;
+  display: flex;
+  justify-content: center;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    filter: invert(1);
+    background-color: black;
+  }
+}
