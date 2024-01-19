@@ -8,7 +8,6 @@ function getRandomExcerpt(): [{ content: string[]; author: string }, number] {
 }
 
 function replaceToSpecifiedExcerpt(i: number) {
-  console.log(`${document.location.href.split('?')[0]}?index=${i}`);
   history.pushState(null, '', `${document.location.href.split('?')[0]}?index=${i}`);
   [excerpt.value, index.value] = [excerpts[i], i];
 }
