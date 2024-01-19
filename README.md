@@ -2,5 +2,10 @@
 Store some of my favorite words.
 Inspired by [Dark495.me](https://dark495.me)
 
+## Keyboard Control
+- ArrowLeft: Previous excerpt
+- ArrowRight: Next excerpt
+- R: Random excerpt
+
 ## License
 [The Unlicense](https://choosealicense.com/licenses/unlicense/)
