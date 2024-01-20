@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
-import excerpts from './assets/excerpts.json';
+import excerpts from './assets/data/excerpts.json';
 
 function getRandomExcerpt(): [{ content: string[]; author: string }, number] {
   const excerpt = excerpts[Math.floor(Math.random() * excerpts.length)];
