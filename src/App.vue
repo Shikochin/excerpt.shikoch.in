@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, defineAsyncComponent, watch } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import excerpts from './assets/data/excerpts.json';
-import { ifSpecial } from './special';
 
 function getRandomExcerpt(): [{ content: string[]; author: string }, number] {
   const excerpt = excerpts[Math.floor(Math.random() * excerpts.length)];
@@ -24,16 +23,6 @@ function refresh() {
 
 let index = ref(0);
 let excerpt: Ref<{ content: string[]; author: string }> = ref({ content: [], author: '' });
-
-// Dynamic load special component
-
-let AsyncComp: any;
-
-watch(index, (newValue) => {
-  if (ifSpecial(newValue)) {
-    AsyncComp = defineAsyncComponent(() => import(/* @vite-ignore */ `./components/Index-${index.value}.vue`));
-  }
-});
 
 onMounted(() => {
   const params = new URL(document.location.href).searchParams;
@@ -75,9 +64,6 @@ document.addEventListener('keyup', (e) => {
     <header>
       <a href="https://github.com/Shikochin/excerpt.shikoch.in"><i class="fa-light fa-pen-nib"></i> 文摘</a>
     </header>
-    <section id="special">
-      <AsyncComp v-if="ifSpecial(index)"></AsyncComp>
-    </section>
     <section id="excerpt">
       <p id="content">
         <span v-for="sentence of excerpt.content" :key="excerpt.content.indexOf(sentence)">{{ sentence }}<br /></span>
@@ -107,11 +93,6 @@ main {
 
 header {
   font-size: 32px;
-}
-
-#special {
-  width: auto;
-  height: 0;
   margin-bottom: 8vh;
 }
 
