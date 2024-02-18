@@ -1,4 +1,11 @@
 {
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "strict": true,
+    "allowJs": true
+  },
+  "typeRoots": ["../node_modules/@types/"],
+  "noImplicitAny": false,
   "files": [],
   "references": [
     {

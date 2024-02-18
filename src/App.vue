@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, defineAsyncComponent, watch, type AsyncComponentLoader } from 'vue';
+import { onMounted, ref, type Ref, defineAsyncComponent, watch } from 'vue';
 import excerpts from './assets/data/excerpts.json';
 import { ifSpecial } from './special';
 
