@@ -2,6 +2,7 @@ body {
   padding: 4%;
   display: flex;
   justify-content: center;
+  margin: 0;
 }
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
