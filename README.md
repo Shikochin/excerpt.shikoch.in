@@ -16,6 +16,6 @@ At the bottom control bar, you can click the left and right arrows or the random
 - **Previous:** Click the left arrow `←` to view the previous excerpt
 - **Random:** Click the random button `🔄` to get a random excerpt
 - **Next:** Click the right arrow `→` to view the next excerpt
-- 
+
 ## License
 The code uses [The Unlicense](https://choosealicense.com/licenses/unlicense/), and excerpts are attributed to the author.
