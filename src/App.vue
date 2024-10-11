@@ -1,67 +1,89 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, type Ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import excerpts from './assets/data/excerpts.json';
+import ExcerptDisplay from './components/ExcerptDisplay.vue';
+import ExcerptController from './components/ExcerptController.vue';
 
-function getRandomExcerpt(): [{ content: string[]; author: string }, number] {
-    const excerpt = excerpts[Math.floor(Math.random() * excerpts.length)];
-    return [excerpt, excerpts.indexOf(excerpt)];
-}
+// Router instance
+const router = useRouter();
 
-function replaceToSpecifiedExcerpt(i: number) {
-    history.pushState(null, '', `${document.location.href.split('?')[0]}?index=${i}`);
-    [excerpt.value, index.value] = [excerpts[i], i];
-}
+// State variables
+const index = ref(0); // Current excerpt index
+const excerpt = ref<{ content: string[]; author: string }>({ content: [], author: '' }); // Current excerpt
 
-function refresh() {
-    let _index
+// Get a random excerpt index that is not the same as the current one
+function getRandomExcerpt(): number {
+    let _index: number;
     do {
-        [, _index] = getRandomExcerpt();
+        _index = Math.floor(Math.random() * excerpts.length);
     } while (_index === index.value);
+    return _index;
+}
+
+// Update the excerpt to the specified index
+function replaceToSpecifiedExcerpt(i: number) {
+    router.push({ query: { index: i } });
+    index.value = i;
+    excerpt.value = excerpts[i];
+    localStorage.setItem('excerptIndex', i.toString()); // Store the current index in local storage
+}
+
+// Refresh the current excerpt with a new random one
+function refresh() {
+    const _index = getRandomExcerpt();
     replaceToSpecifiedExcerpt(_index);
 }
 
-let index = ref(0);
-let excerpt: Ref<{ content: string[]; author: string }> = ref({ content: [], author: '' });
+// Extract the "index" parameter value from the URL query string
+function extractIndexParam(str: string): string {
+    const match = str.match(/index=\w+/);
+    return match ? match[0] : '';
+}
+
+// Initialize the excerpt based on the current state or storage
+function initExcerpt() {
+    const currentStateIndex = extractIndexParam(history.state.current);
+    setInitialIndex(currentStateIndex);
+    replaceToSpecifiedExcerpt(index.value);
+}
+
+// Set the initial index for the excerpt
+function setInitialIndex(stateIndex: string) {
+    const storedIndex = parseInt(localStorage.getItem('excerptIndex') || '-1');
+    if (stateIndex && parseInt(stateIndex.split('=')[1]) !== storedIndex) {
+        index.value = parseInt(stateIndex.split('=')[1]);
+    } else if (stateIndex && parseInt(stateIndex.split('=')[1]) === storedIndex) {
+        index.value = storedIndex;
+    } else {
+        index.value = getRandomExcerpt();
+    }
+}
+
+// Handle key up events for navigation and refresh
+function handleKeyUp(e: KeyboardEvent) {
+    switch (e.key) {
+        case 'ArrowLeft':
+            if (index.value > 0) replaceToSpecifiedExcerpt(index.value - 1);
+            break;
+        case 'ArrowRight':
+            if (index.value < excerpts.length - 1) replaceToSpecifiedExcerpt(index.value + 1);
+            break;
+        case 'r':
+            refresh();
+            break;
+        default:
+            break;
+    }
+}
 
 onMounted(() => {
-    const initExcerpt = () => {
-        const params = new URL(document.location.href).searchParams;
-        const _index = params.get('index');
-        if (_index) {
-            const i = parseInt(_index);
-            if (i >= 0 && i < excerpts.length) {
-                replaceToSpecifiedExcerpt(i);
-                return;
-            }
-        }
-
-        const [, i] = getRandomExcerpt();
-        replaceToSpecifiedExcerpt(i);
-    };
-
     initExcerpt();
+    document.addEventListener('keyup', handleKeyUp); // Register key up event
+});
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-        switch (e.key) {
-            case 'ArrowLeft':
-                if (index.value > 0) replaceToSpecifiedExcerpt(index.value - 1);
-                break;
-            case 'ArrowRight':
-                if (index.value < excerpts.length - 1) replaceToSpecifiedExcerpt(index.value + 1);
-                break;
-            case 'r':
-                refresh();
-                break;
-            default:
-                break;
-        }
-    };
-
-    document.addEventListener('keyup', handleKeyUp);
-
-    onBeforeUnmount(() => {
-        document.removeEventListener('keyup', handleKeyUp);
-    });
+onBeforeUnmount(() => {
+    document.removeEventListener('keyup', handleKeyUp); // Clean up the event listener
 });
 </script>
 
@@ -70,22 +92,9 @@ onMounted(() => {
         <header>
             <a href="https://github.com/Shikochin/excerpt.shikoch.in"><i class="fa-light fa-pen-nib"></i> 文摘</a>
         </header>
-        <section id="excerpt">
-            <p id="content">
-                <span v-for="sentence in excerpt.content" :key="excerpt.content.indexOf(sentence)">{{ sentence
-                    }}<br /></span>
-            </p>
-            <p id="author">—— {{ excerpt.author }}</p>
-        </section>
-        <section id="controller">
-            <a title="上一个" v-if="index != 0" @click="replaceToSpecifiedExcerpt(index - 1)"><i
-                    class="fa-thin fa-arrow-left-long"></i></a>
-            <a class="disabled" title="已经到头了" v-else><i class="fa-thin fa-arrow-left-long"></i></a>
-            <a title="随机" @click="refresh"><i class="fa-thin fa-arrow-rotate-right"></i></a>
-            <a title="下一个" v-if="index != excerpts.length - 1" @click="replaceToSpecifiedExcerpt(index + 1)"><i
-                    class="fa-thin fa-arrow-right-long"></i></a>
-            <a class="disabled" title="已经到头了" v-else><i class="fa-thin fa-arrow-right-long"></i></a>
-        </section>
+        <ExcerptDisplay :excerpt="excerpt" />
+        <ExcerptController :index="index" :total="excerpts.length" @navigate="replaceToSpecifiedExcerpt"
+            @refresh="refresh" />
         <footer>
             Excerpts are attributed to the author<br />
             2024-present by <a href="https://github.com/Shikochin">Shikochin</a>
@@ -96,44 +105,6 @@ onMounted(() => {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Noto+Serif+SC&display=swap');
 
-main {
-    font-family: 'Instrument Serif', 'Noto Serif SC', serif;
-}
-
-header {
-    font-size: 32px;
-    margin-bottom: 8vh;
-}
-
-#excerpt {
-    margin-bottom: 1vh;
-
-    #content {
-        font-size: 40px;
-    }
-
-    #author {
-        font-size: 28px;
-    }
-}
-
-#controller {
-    font-size: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10vh;
-
-    a {
-        opacity: 0.5;
-        transition: opacity 0.3s;
-    }
-
-    a:hover {
-        opacity: 0.8;
-    }
-}
-
 a {
     text-decoration: none;
     color: black;
@@ -141,10 +112,13 @@ a {
     user-select: none;
 }
 
-a.disabled {
-    cursor: default;
-    pointer-events: none;
-    opacity: 0.2 !important;
+main {
+    font-family: 'Instrument Serif', 'Noto Serif SC', serif;
+}
+
+header {
+    font-size: 32px;
+    margin-bottom: 8vh;
 }
 
 footer {
