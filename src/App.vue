@@ -26,7 +26,6 @@ function replaceToSpecifiedExcerpt(i: number) {
     router.push({ query: { index: i } });
     index.value = i;
     excerpt.value = excerpts[i];
-    localStorage.setItem('excerptIndex', i.toString()); // Store the current index in local storage
 }
 
 // Refresh the current excerpt with a new random one
@@ -50,11 +49,8 @@ function initExcerpt() {
 
 // Set the initial index for the excerpt
 function setInitialIndex(stateIndex: string) {
-    const storedIndex = parseInt(localStorage.getItem('excerptIndex') || '-1');
-    if (stateIndex && parseInt(stateIndex.split('=')[1]) !== storedIndex) {
+    if (stateIndex) {
         index.value = parseInt(stateIndex.split('=')[1]);
-    } else if (stateIndex && parseInt(stateIndex.split('=')[1]) === storedIndex) {
-        index.value = storedIndex;
     } else {
         index.value = getRandomExcerpt();
     }
