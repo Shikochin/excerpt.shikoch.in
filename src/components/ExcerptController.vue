@@ -29,7 +29,7 @@ const emit = defineEmits(['navigate', 'refresh']);
 
 <style scoped>
 #controller {
-    font-size: 40px;
+    font-size: 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;

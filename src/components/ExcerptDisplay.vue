@@ -21,11 +21,32 @@ const props = defineProps<{
     margin-bottom: 1vh;
 }
 
+
 #content {
-    font-size: 40px;
+    font-size: 4vw;
 }
 
 #author {
-    font-size: 28px;
+    font-size: 3vw;
+}
+
+@media (max-width: 600px) {
+    #content {
+        font-size: 8vw;
+    }
+
+    #author {
+        font-size: 6vw;
+    }
+}
+
+@media (min-width: 1200px) {
+    #content {
+        font-size: 3vw;
+    }
+
+    #author {
+        font-size: 2vw;
+    }
 }
 </style>

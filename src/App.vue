@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import excerpts from './assets/data/excerpts.json';
 import ExcerptDisplay from './components/ExcerptDisplay.vue';
 import ExcerptController from './components/ExcerptController.vue';
+import CommitID from './components/CommitID.vue';
 
 // Router instance
 const router = useRouter();
@@ -92,8 +93,11 @@ onBeforeUnmount(() => {
         <ExcerptController :index="index" :total="excerpts.length" @navigate="replaceToSpecifiedExcerpt"
             @refresh="refresh" />
         <footer>
+            Commit ID:
+            <CommitID />
+            <br />
             Excerpts are attributed to the author<br />
-            2024-present by <a href="https://github.com/Shikochin">Shikochin</a>
+            2024-present by <a href="https://github.com/Shikochin" target="_blank">@Shikochin</a>
         </footer>
     </main>
 </template>
@@ -113,12 +117,32 @@ main {
 }
 
 header {
-    font-size: 32px;
+    font-size: 3vw;
     margin-bottom: 8vh;
 }
 
 footer {
     user-select: none;
-    font-size: 22px;
+    font-size: 2.5vw;
+}
+
+@media (max-width: 600px) {
+    header {
+        font-size: 7vw;
+    }
+
+    footer {
+        font-size: 4.5vw;
+    }
+}
+
+@media (min-width: 1200px) {
+    header {
+        font-size: 2vw;
+    }
+
+    footer {
+        font-size: 1.5vw;
+    }
 }
 </style>
